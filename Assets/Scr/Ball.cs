@@ -12,10 +12,10 @@ public class Ball : MonoBehaviour
     private Rigidbody2D _rb;
     private Collider2D _collider;
 
-    void Start()
-    {
-        Init();    
-    }
+    // void Start()
+    // {
+    //     Init();    
+    // }
 
     public void Init()
     {
