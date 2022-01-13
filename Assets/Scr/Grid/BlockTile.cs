@@ -28,12 +28,12 @@ public class BlockTile : MonoBehaviour
    private int _totalHits = 1;
    private int _currentHits =0;  
 
-    void Start()
-    {
-        Init();
-    }
+   public void SetData(BlockColor color)
+   {
+       _color = color;
+   }
 
-    private void Init()
+    public void Init()
     {
         _currentHits = 0;
         _totalHits = _type == BlockType.Big ? 2 : 1;
