@@ -24,7 +24,6 @@ public class Ball : MonoBehaviour
 
         _collider.enabled = true;
         _rb.velocity = Random.insideUnitCircle.normalized * _initSpeed;
-        // _rb.velocity = Vector2.right * _initSpeed;
     }
 
     void FixedUpdate()
@@ -48,16 +47,27 @@ public class Ball : MonoBehaviour
 
         if (Mathf.Abs(velocity.x) < BALL_VELOCITY_MIN_AXIS_VALUE)
         {
-            velocity.x += Mathf.Sign(velocity.x) * BALL_VELOCITY_MIN_AXIS_VALUE * Time.deltaTime;
+            float sign = velocity.x == 0 ? Mathf.Sign(-transform.position.x) : Mathf.Sign(velocity.x);
+            velocity.x += sign * BALL_VELOCITY_MIN_AXIS_VALUE * Time.deltaTime;
         }
         else if (Mathf.Abs(velocity.y) < BALL_VELOCITY_MIN_AXIS_VALUE)
         {
-            velocity.y += Mathf.Sign(velocity.y) * BALL_VELOCITY_MIN_AXIS_VALUE * Time.deltaTime;
-            // Debug.Log(velocity.y);
-
-            // TODO: Fix this thing
+            float sign = velocity.y == 0 ? Mathf.Sign(-transform.position.y) : Mathf.Sign(velocity.y);
+            velocity.y += sign * BALL_VELOCITY_MIN_AXIS_VALUE * Time.deltaTime;
         }
 
         _rb.velocity = velocity;
+    }
+
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        BlockTile blockTileHit;
+        if (!other.collider.TryGetComponent(out blockTileHit))
+        {
+            return;
+        }
+
+        ContactPoint2D contactPoint = other.contacts[0];
+        blockTileHit.OnHitCollision(contactPoint);
     }
 }
