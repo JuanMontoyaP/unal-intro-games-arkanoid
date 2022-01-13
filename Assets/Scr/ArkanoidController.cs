@@ -15,6 +15,11 @@ public class ArkanoidController : MonoBehaviour
 
     private int _currentLevel = 0;
 
+    void Start()
+    {
+        ArkanoidEvent.OnBallReachDeadZoneEvent += OnBallReachDeadZone;
+    }
+
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
@@ -22,6 +27,11 @@ public class ArkanoidController : MonoBehaviour
             InitGame();
             SetInitialBall();
         }
+    }
+
+    private void OnDestroy()
+    {
+        ArkanoidEvent.OnBallReachDeadZoneEvent -= OnBallReachDeadZone;
     }
 
     private void InitGame()
@@ -60,5 +70,24 @@ public class ArkanoidController : MonoBehaviour
         }
 
         _balls.Clear();
+    }
+
+    private void OnBallReachDeadZone(Ball ball)
+    {
+        ball.Hide();
+        _balls.Remove(ball);
+        Destroy(ball.gameObject);
+
+        CheckGameOver();
+    }
+
+    private void CheckGameOver()
+    {
+        if (_balls.Count == 0)
+        {
+            ClearBalls();
+
+            Debug.Log("Game Over: LOSE!");
+        }
     }
 }
