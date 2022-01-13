@@ -26,10 +26,13 @@ public class BlockTile : MonoBehaviour
    private Collider2D _collider;
 
    private int _totalHits = 1;
-   private int _currentHits =0;  
+   private int _currentHits =0;
 
-   public void SetData(BlockColor color)
+   private int _id;
+
+   public void SetData(int id, BlockColor color)
    {
+       _id = id;
        _color = color;
    }
 
@@ -52,6 +55,8 @@ public class BlockTile : MonoBehaviour
         {
             _collider.enabled = false;
             gameObject.SetActive(false);
+
+            ArkanoidEvent.OnBlockDestroyedEvent?.Invoke(_id);
         }
         else
         {

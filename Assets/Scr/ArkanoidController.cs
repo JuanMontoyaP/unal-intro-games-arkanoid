@@ -18,6 +18,8 @@ public class ArkanoidController : MonoBehaviour
     void Start()
     {
         ArkanoidEvent.OnBallReachDeadZoneEvent += OnBallReachDeadZone;
+
+        ArkanoidEvent.OnBlockDestroyedEvent += OnBlockDestroyed;
     }
 
     void Update()
@@ -32,6 +34,8 @@ public class ArkanoidController : MonoBehaviour
     private void OnDestroy()
     {
         ArkanoidEvent.OnBallReachDeadZoneEvent -= OnBallReachDeadZone;
+
+        ArkanoidEvent.OnBlockDestroyedEvent -= OnBlockDestroyed;
     }
 
     private void InitGame()
@@ -88,6 +92,25 @@ public class ArkanoidController : MonoBehaviour
             ClearBalls();
 
             Debug.Log("Game Over: LOSE!");
+        }
+    }
+
+    private void OnBlockDestroyed(int blockId)
+    {
+        if (_gridController.GetBlocksActive() == 0)
+        {
+            _currentLevel++;
+
+            if (_currentLevel >= _levels.Count)
+            {
+                ClearBalls();
+                Debug.Log("Game Over: WIN!");
+            }
+            else
+            {
+                SetInitialBall();
+                _gridController.BuildGrid(_levels[_currentLevel]);
+            }
         }
     }
 }

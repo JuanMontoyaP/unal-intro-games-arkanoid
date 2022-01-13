@@ -1,10 +1,13 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class GridController : MonoBehaviour
 {
     [SerializeField] private Vector2 _offset = new Vector2(-5.45f, 4);
     
     private LevelData _currentLevelData;
+
+    private Dictionary<int, BlockTile> _blockTiles = new Dictionary<int, BlockTile>();
 
     // void Start()
     // {
@@ -22,6 +25,8 @@ public class GridController : MonoBehaviour
     {
         int rowCount = _currentLevelData.RowCount;
         float verticalSpacing = _currentLevelData.rowSpacing;
+
+        int id = 0;
 
         for (int j = 0; j < rowCount; j++)
         {
@@ -47,8 +52,11 @@ public class GridController : MonoBehaviour
                 float y = _offset.y - (blockSize.y + verticalSpacing) * j;
                 blockTile.transform.position = new Vector3(x, y, 0);
 
-                blockTile.SetData(blockColor);
+                blockTile.SetData(id, blockColor);
                 blockTile.Init();
+
+                _blockTiles.Add(id, blockTile);
+                id++;
             }
         }
     }
@@ -60,6 +68,8 @@ public class GridController : MonoBehaviour
         {
             Destroy(transform.GetChild(i).gameObject);
         }
+
+        _blockTiles.Clear();
     }
 
     private Vector2 GetBlockSize(BlockType type)
@@ -80,5 +90,19 @@ public class GridController : MonoBehaviour
         }
 
         return string.Empty;
+    }
+
+    public int GetBlocksActive()
+    {
+        int totalActiveBlocks = 0;
+        foreach (BlockTile block in _blockTiles.Values)
+        {
+            if (block.gameObject.activeSelf)
+            {
+                totalActiveBlocks++;
+            }
+        }
+
+        return totalActiveBlocks;
     }
 }
