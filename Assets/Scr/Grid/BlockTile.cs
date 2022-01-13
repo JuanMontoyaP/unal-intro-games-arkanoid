@@ -19,22 +19,25 @@ public class BlockTile : MonoBehaviour
 {
     private const string BLOCK_BIG_PATH = "Sprites/BlockTiles/Big/Big_{0}_{1}";
 
-   [SerializeField] private BlockType _type = BlockType.Big;
-   [SerializeField] private BlockColor _color = BlockColor.Blue;
+    [SerializeField] private int _score = 10;
+    [SerializeField] private BlockType _type = BlockType.Big;
+    [SerializeField] private BlockColor _color = BlockColor.Blue;
 
-   private SpriteRenderer _renderer;
-   private Collider2D _collider;
+    private SpriteRenderer _renderer;
+    private Collider2D _collider;
 
-   private int _totalHits = 1;
-   private int _currentHits =0;
+    private int _totalHits = 1;
+    private int _currentHits =0;
 
-   private int _id;
+    private int _id;
 
-   public void SetData(int id, BlockColor color)
-   {
+    public int Score => _score;
+
+    public void SetData(int id, BlockColor color)
+    {
        _id = id;
        _color = color;
-   }
+    }
 
     public void Init()
     {
