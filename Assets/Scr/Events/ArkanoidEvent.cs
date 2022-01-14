@@ -12,4 +12,10 @@ public static class ArkanoidEvent
 
     public delegate void LevelUpdatedAction(int level);
     public static LevelUpdatedAction OnLevelUpdatedEvent;
+
+    public delegate void GameStartAction();
+    public static GameStartAction OnGameStartEvent;
+
+    public delegate void GameOverAction();
+    public static GameOverAction OnGameOverEvent;
 }

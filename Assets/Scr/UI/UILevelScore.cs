@@ -8,20 +8,29 @@ public class UILevelScore : MonoBehaviour
 
     private TextMeshProUGUI _scoreText;
     private TextMeshProUGUI _levelText;
+    private CanvasGroup _canvasGroup;
 
     void Start()
     {
+        _canvasGroup = GetComponent<CanvasGroup>();
+        _canvasGroup.alpha = 0;
+
+        
         _scoreText = transform.Find("ScoreText").GetComponent<TextMeshProUGUI>();
         _levelText = transform.Find("LevelText").GetComponent<TextMeshProUGUI>();
 
         ArkanoidEvent.OnScoreUpdatedEvent += OnScoreUpdated;
         ArkanoidEvent.OnLevelUpdatedEvent += OnLevelUpdated;
+        ArkanoidEvent.OnGameStartEvent += OnGameStart;
+        ArkanoidEvent.OnGameOverEvent += OnGameOver;
     }
 
     private void OnDestroy()
     {
         ArkanoidEvent.OnScoreUpdatedEvent -= OnScoreUpdated;
         ArkanoidEvent.OnLevelUpdatedEvent -= OnLevelUpdated;
+        ArkanoidEvent.OnGameStartEvent -= OnGameStart;
+        ArkanoidEvent.OnGameOverEvent -= OnGameOver;
     }
 
     private void OnScoreUpdated(int score, int totalScore)
@@ -32,5 +41,15 @@ public class UILevelScore : MonoBehaviour
     private void OnLevelUpdated(int currentLevel)
     {
         _levelText.text = string.Format(LEVEL_TEXT_TEMPLATE, currentLevel);
+    }
+
+    private void OnGameStart()
+    {
+        _canvasGroup.alpha = 1;
+    }
+
+    private void OnGameOver()
+    {
+        _canvasGroup.alpha = 0;
     }
 }
